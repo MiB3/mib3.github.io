@@ -1,0 +1,562 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="../favicon.ico" />
+
+	<title>Image Synthesis 2015 - Final Project - Made in Switzerland</title>
+
+	<link href="resources/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/offcanvas.css" rel="stylesheet">
+	<link href="resources/custom2014.css" rel="stylesheet">
+	<link href="resources/twentytwenty.css" rel="stylesheet" type="text/css" />
+
+	<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+  </head>
+
+  <body>
+
+   <div class="container headerBar" style="height: 100px">
+      <h1>Final Project - Made in Switzerland</h1>
+      <h4>Milan Bombsch</h4>
+  </div>
+
+  <div class="container contentWrapper">
+      <div class="pageContent">
+
+         <!-- ================================================================= -->
+         <h2>Motivation</h2>
+
+         <div style="width: 35.5%; float: left">
+            <div class="twentytwenty-container">
+                <img src="images/stage-with-fog.jpg" alt="Stage with fog" class="img-responsive">
+            </div>
+            <a href="http://www.creativebackstage.com/creativebackstage/desrt%20mt%20concert%20fog.jpg">Source</a>
+        </div>
+
+        <div style="width: 31.5%; float: left">
+            <div class="twentytwenty-container">
+                <img src="images/stage-with-light.jpg" alt="Stage with light" class="img-responsive">
+            </div>
+            <a href="http://www.socapex.com/stage-lighting-cp7-me10-151.aspx">Source</a>
+        </div>
+
+        <div style="width: 31.5%; float: left">
+            <div class="twentytwenty-container">
+                <img src="images/Alphorn-player.jpg" alt="Alphorn player" class="img-responsive">
+            </div>
+            <a href="http://en.wikipedia.org/wiki/Alphorn#/media/File:Alphorn_player_in_Wallis.jpg">Source</a>
+        </div>
+
+
+        <p style="padding-top: 150px;">
+          For the project of the Image Syntheis course 2015 of ETH Zürich I wanted to render an Alphorn on a stage. The atmosphere should be more like at a pop concert than at a traditional concert. This is with coloured stage lights and fog. On the stage should only be the alphorn on a stand without out any peolpe around it. The scene is inside a building.</br>
+          The image matches the theme "Made in Switzerland" since the Alphorn is a typical swiss music instrument.
+        </p>
+    </br>
+
+  <!-- ================================================================= -->
+  <h2>Simple features</h2>
+  <h3>Depth of field</h3>
+
+  <p>Relevant files:</p>
+  <tt>src/myClasses/physicalCamera.cpp</tt></br>
+</br>
+<p>The <tt>physical</tt> camera model mimics the depth of field effect of real lenses by blurring objects which are far away from the focal plane. This is done by varying the origin of the camera on a disk parallel to the focal plane with radius <tt>apertureRadius</tt>.</br>
+  The camera can be specified with the following parameters: <tt>width</tt> (width of the output image), <tt>height</tt> (height of the output image), <tt>toWorld</tt> Transformation, <tt>fov</tt> (the horizontal field of view in degrees), <tt>nearClip</tt> and <tt>farClip</tt> to specify th clipping planes, <tt>apertureRadius</tt> (the radius of the aperture), <tt>focalDistance</tt> (the distance to the focal plane)</p>
+
+  <p>Pictures:</p>
+
+  <div class="twentytwenty-container" style="width: 70%; margin-left: 0px; margin-right: 10px; float: left">
+     <img src="images/dof_1_nori_100spp.png" alt="Nori path_mis" class="img-responsive">
+     <img src="images/dof_1_mitsuba_100spp.png" alt="Mitsuba path" class="img-responsive">
+ </div>
+ <p style="margin: 0px; float: left;">
+     Samples per pixel: 100</br>
+     apertureRadius: 0.1</br>
+     focalDistance: 5.0
+ </p>
+
+ <h2></h2>
+ <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+     <img src="images/dof_2_nori_100spp.png" alt="Nori path_mis" class="img-responsive">
+     <img src="images/dof_2_mitsuba_100spp.png" alt="Mitsuba path" class="img-responsive">
+ </div>
+ <p>
+     Samples per pixel: 100</br>
+     apertureRadius: 0.3</br>
+     focalDistance: 5.5
+ </p>
+
+ <h2></h2>
+ <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+     <img src="images/dof_3_nori_100spp.png" alt="Nori path_mis" class="img-responsive">
+     <img src="images/dof_3_mitsuba_100spp.png" alt="Mitsuba path" class="img-responsive">
+ </div>
+ <p>
+     Samples per pixel: 100</br>
+     apertureRadius: 0.8</br>
+     focalDistance: 6.0
+ </p>
+
+ <h2></h2>
+ <h3>Bump mapping</h3>
+
+ <p>Relevant files:</p>
+ <tt>src/myClasses/bumpMapBSDF.cpp</tt></br>
+</br>
+
+<p>For simplicity I only support normal maps and not bump maps. A pixel with r, g and b in the normal map will be transform to a normal in the local coordinate frame with n = (2 * r - 1, 2 * g - 1, 2 * b - 1). The lookup is based on the uv coordinates of the current shading point. A bump map is in my implementation a nested bsdf similar to mitsuba.</p>
+
+<p>Pictures:</p>
+
+<div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+  <img src="images/bumpmapping_1_nori_100spp.png" alt="without bumpmap" class="img-responsive">
+  <img src="images/bumpmapping_2_nori_100spp.png" alt="with bumpmap" class="img-responsive">
+  <img src="images/bumpmapping_3_nori_100spp.png" alt="without bumpmap" class="img-responsive">
+  <img src="images/bumpmapping_4_nori_100spp.png" alt="with bumpmap" class="img-responsive">
+</div>
+<p>
+  path_mis</br>
+  Samples per pixel: 100</br>
+</p>
+
+<h2></h2>
+<div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+  <img src="images/bumpmapping_3_nori_100spp.png" alt="without bumpmap" class="img-responsive">
+  <img src="images/bumpmapping_5_nori_100spp.png" alt="with bumpmap" class="img-responsive">
+</div>
+<p>
+  path_mis</br>
+  Samples per pixel: 100</br>
+  Constant normal map with value (0, 0, 1)
+</p>
+
+<h2></h2>
+
+
+<h3>Texturing</h3>
+
+<p>Relevant files:</p>
+<tt>include/myIncludes/texture.h</tt></br>
+<tt>include/myIncludes/constantTexture.h</tt></br>
+<tt>src/myClasses/bitmapTexture.cpp</tt></br>
+<tt>src/myClasses/uvTexture.cpp</tt></br>
+<tt>src/myClasses/checkerboardTexture2D.cpp</tt></br>
+<tt>src/myClasses/checkerboardTexture3D.cpp</tt></br>
+<tt>src/myClasses/exponential3D.cpp</tt></br>
+<tt>src/myClasses/perlinNoise3D.cpp</tt></br>
+<tt>src/myClasses/combinationTexture.cpp</tt></br>
+</br>
+
+<p>My texturing system includes exr-bitmap textures and procedural 2D and 3D textures. To evaluate a texure the call needs to pass a 2D and a 3D point so the underlying texture can take the one which is appropriate for its evaluation. This is a very flexible approach and enables not only the coloring of objects but also changing other parameters of the bsdf. We can also use textures to describe the density of heterogeneous volumes.</br>
+   I will not list all the parameters here, because every texture has its own set of parameter. One they all share is the <tt>name</tt> parameter, which helps the object the texture gets assigned to, to identifie for what it shoudl use the texture.</p>
+
+   <h2></h2>
+   <p>Pictures:</p>
+
+   <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+      <img src="images/texturing_1_nori_100spp.png" alt="Nori path_mis" class="img-responsive">
+  </div>
+  <p>
+      Samples per pixel: 100</br>
+      Left sphere: 2D Checkerboard</br>
+      Right sphere: 3D Checkerboard</br>
+  </p>
+
+  <h2></h2>
+
+  <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+      <img src="images/texturing_3_nori_500spp.png" alt="Nori path_mis" class="img-responsive">
+  </div>
+  <p>
+      Samples per pixel: 500</br>
+      Left sphere: 3D Perline Noise</br>
+      Right sphere: 3D Exponential texture from red to turquois</br>
+  </p>
+
+  <h2></h2>
+
+  <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+      <img src="images/texturing_2_nori_10000spp.png" alt="Nori volume_path_mats" class="img-responsive">
+  </div>
+  <p>
+      Samples per pixel: 10 000</br>
+      Heterogeneous medium:</br>
+      3D Checkerboard texture</br>
+      SigmaS: (4.5 4.5 0.5)</br>
+      SigmaA: (0.5 0.5 4.5)</br>
+  </p>
+
+  <h2></h2>
+
+  <!-- ================================================================= -->
+
+  <h2>Medium features</h2>
+  <h3>Homogeneous Volumetric Path Tracing</h3>
+
+  <p>Relevant files:</p>
+  <tt>include/myIncludes/medium.h</tt></br>
+  <tt>include/myIncludes/phaseFunction.h</tt></br>
+  <tt>src/myClasses/homogeneous.cpp</tt></br>
+  <tt>src/myClasses/vacuum.cpp</tt></br>
+  <tt>src/myClasses/isotropic.cpp</tt></br>
+  <tt>src/myClasses/volumetricPath_mats.cpp</tt></br>
+</br>
+
+<p>In my implementation a volume is represented by a mesh which has two media asigned to it. One for the inside and one for the outside. This way the integrator can check when hitting a mesh how the current medium changes. Most of the time I assign a indexed matched dielectric boundary to the mesh, so that the boundary does not have any effect on the appearence of the volume. A homogeneous medium has the typical parameters <tt>sigmaS</tt> and <tt>sigmaA</tt>. With my <tt>volume_path_mats</tt> implementation there is the constraint that they need to add up to the same value for r, g and b. The <tt>volume_path_mats</tt> is a implementation of the pseudocode in the slides without greater changes.</br>
+ The only paramter this integrator has is a boolean named <tt>progressive</tt>, with which we can get progressive updates to the desired number of samples per pixel.</p>
+
+ <h2></h2>
+ <p>Tests:</p>
+ <p>My <tt>volume_path_mats</tt> implmementation passes the tests <tt>test-direct.xml</tt> from Programming Assignment 1</br>
+    It also passes the <tt>test-mesh-furnace.xml</tt> from Programming Assignment 3 if we put a homogeneous medium with <tt>sigmaS</tt> = 1 and <tt>sigmaA</tt> = 0 inside the furnace.</p>
+
+    <h2></h2>
+    <p>Pictures:</p>
+
+    <h2></h2>
+    <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+       <img src="images/volume_mats_5_nori_1000spp.png" alt="nori volume_path_mats" class="img-responsive">
+       <img src="images/volume_mats_5_mitsuba_1000spp.png" alt="mitsuba volpath_simple" class="img-responsive">
+   </div>
+   <p>
+       Samples per pixel: 1000</br>
+       Medium inside the Sphere:</br>
+       SigmaS: 10</br>
+       SigmaA: 0</br>
+       Phase Function: Isotropic</br>  		
+   </p>
+
+   <h2></h2>
+   <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+       <img src="images/volume_mats_4_nori_1000spp.png" alt="nori volume_path_mats" class="img-responsive">
+       <img src="images/volume_mats_4_mitsuba_1000spp.png" alt="mitsuba volpath_simple" class="img-responsive">
+   </div>
+   <p>
+       Samples per pixel: 1000</br>
+       Medium inside the Sphere:</br>
+       SigmaS: 0</br>
+       SigmaA: 2</br>
+       Phase Function: Isotropic</br> 
+   </p>
+
+   <h2></h2>
+   <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+       <img src="images/volume_mats_2_nori_1000spp.png" alt="nori volume_path_mats" class="img-responsive">
+       <img src="images/volume_mats_2_mitsuba_1000spp.png" alt="mitsuba volpath_simple" class="img-responsive">
+   </div>
+   <p>
+       Samples per pixel: 1000</br>
+       Medium inside the Sphere:</br>
+       SigmaS: 1.8 1.8 0.2</br>
+       SigmaA: 0.2 0.2 1.8</br>
+       Phase Function: Isotropic</br> 
+   </p>
+   <h2></h2>
+
+   <!-- ================================================================= -->
+   <h2>Advanced features</h2>
+
+   <h3>Volumetric Photon Mapping</h3>
+
+   <p>Relevant files:</p>
+   <tt>include/myIncludes/sphereKDTree.h</tt></br>
+   <tt>src/myClasses/volumetricPhotonMapper.cpp</tt></br>
+</br>
+
+<p>The <tt>volumetric_photonmapper</tt> is based on the <tt>photonmapper</tt> we developed in the Programming Assignemnt 4. I added a second Kd-tree which stores the volume photons. To be able to not only query for photons near a point, but around a ray, I modified the implementation from <tt>kdtree.h</tt> in <tt>sphereKDTree.h</tt>. I based this approach on the suggestions in the Beam Radiance Estimate paper by Jarosz et al<a href="#ref1">[1]</a>. This integrator can do density estimations with a fixed radius or with knn, both on the surface and inside a volume. If surface or volume density estimation ist based on a fixed radius, the integrator can also be run progressivly. And because the volume density estimation from <a href="#ref1">[1]</a> is based on disc intersections we can use the formula from Knaus and Zwicker <a href="#ref2">[2]</a> for both updating the surface and the volume density estimation radius. This integrator can handle homogeneous and heterogeneous volumes.</br>
+    The parameters for this integrator are:</br>
+    <tt>photonCount</tt>, to specify the total amount of photons we want to store in the scene;</br>
+    <tt>surfacePhotonCount</tt> and <tt>volumePhotonCount</tt> to seperatly say how many photons we want to store in each of those maps;</br>
+    <tt>surfacePhotonRadius</tt> and <tt>volumePhotonRadius</tt> to set a fixed radius width for the density estimations;</br>
+    <tt>surfaceK</tt> and <tt>volumeK</tt> to specify the K nearest neighbours which should be used for the density estimation;</br>
+    And <tt>progressive</tt> to get progressive updates and run the integrator till we tell it to stop. The <tt>alpha</tt> for the radius reduction is hard coded to 0.5.</p>
+
+    <p>Pictures:</p>
+
+    <h2></h2>
+    <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+       <img src="images/volume_pmap_5_nori_2698spp_269Mp.png" alt="nori volumetric_photonmapper" class="img-responsive">
+       <img src="images/volume_mats_5_mitsuba_1000spp.png" alt="mitsuba volpath_simple" class="img-responsive">
+   </div>
+   <p>
+       Medium inside the Sphere:</br>
+       SigmaS: 10</br>
+       SigmaA: 0</br>
+       Phase Function: Isotropic</br>  
+       <b>Nori</b></br>
+       Progressive photon mapping</br>
+       2698 iterations</br>
+       1 sample per pixel per iteration</br>
+       100 000 photons per iteration</br>
+       Surface photon start radius: 0.05</br>
+       Volume photon start radius: 0.05</br>
+       <b>Mitsuba</b></br>
+       Samples per pixel: 1000</br>
+   </p>
+
+   <h2></h2>
+   <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+       <img src="images/volume_pmap_4_nori_2085spp_208Mp.png" alt="nori volumetric_photonmapper" class="img-responsive">
+       <img src="images/volume_mats_4_mitsuba_1000spp.png" alt="mitsuba volpath_simple" class="img-responsive">
+   </div>
+   <p>
+       Medium inside the Sphere:</br>
+       SigmaS: 0</br>
+       SigmaA: 2</br>
+       Phase Function: Isotropic</br>  
+       <b>Nori</b></br>
+       Progressive photon mapping</br>
+       2085 iterations</br>
+       1 sample per pixel per iteration</br>
+       100 000 photons per iteration</br>
+       Surface photon start radius: 0.05</br>
+       Volume photon start radius: 0.05</br>
+       <b>Mitsuba</b></br>
+       Samples per pixel: 1000</br>
+   </p>
+
+   <h2></h2>
+   <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+       <img src="images/volume_pmap_2_nori_3009spp_301Mp.png" alt="nori volumetric_photonmapper" class="img-responsive">
+       <img src="images/volume_mats_2_mitsuba_1000spp.png" alt="mitsuba volpath_simple" class="img-responsive">
+   </div>
+   <p>
+       Medium inside the Sphere:</br>
+       SigmaS: (1.8 1.8 0.2)</br>
+       SigmaA: (0.2 0.2 1.8)</br>
+       Phase Function: Isotropic</br>  
+       <b>Nori</b></br>
+       Progressive photon mapping</br>
+       3009 iterations</br>
+       1 sample per pixel per iteration</br>
+       100 000 photons per iteration</br>
+       Surface photon start radius: 0.05</br>
+       Volume photon start radius: 0.05</br>
+       <b>Mitsuba</b></br>
+       Samples per pixel: 1000</br>
+   </p>
+   <h2></h2>
+
+   <!-- ================================================================= -->
+   <h2>Other features</h2>
+
+   <h3>Stratified sampling</h3>
+   <p>Relevant files:</p>
+   <tt>src/myClasses/stratified.cpp</tt></br>
+</br>
+<p>I implemented a stratified sampler as explained in the course.</p>
+
+<div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+    <img src="images/stratified_1_nori_256spp.png" alt="nori independent" class="img-responsive">
+    <img src="images/stratified_2_nori_256spp.png" alt="nori stratified" class="img-responsive">
+</div>
+<p>
+    direct_mats</br>
+    Samples per pixel: 256</br>
+</p>
+
+<h2></h2>
+
+<h3>Spotlights and projector lights</h3>
+
+<p>Relevant files:</p>
+<tt>src/myClasses/spotlight.cpp</tt></br>
+<tt>src/myClasses/projectorLight.cpp</tt></br>
+</br>
+
+<p>My spotlight and projector light implementations are based on the descriptions in the book PBRT v2 <a href="#ref4">[4]</a>.</br>
+ The spotlight has a <tt>power</tt>, which describes how bright and which color the spotlight has. The <tt>totalAngle</tt> defines the total width of the spotlights cone. With the <tt>falloffStart</tt> angle we can define a intensity falloff at the edge of the spotlights cone. The spotlight also has a <tt>toWorld</tt> transformation with which we can set its position and orientation.</br>
+ The projector light works similar to a perspective camera. It therefore defines a <tt>fov</tt>, which is similar to the spotlights <tt>totalAngle</tt> parameter. Any texture can be used as the projected image. The projector light also has a <tt>width</tt> and a <tt>height</tt> parameter which is necessary to get the aspect ratio of the projected image correct. With the <tt>toWorld</tt> transform we can again set the position and orientation of the light.</p>
+
+ <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+    <img src="images/spot_1_nori_472spp_47Mp.png" alt="nori independent" class="img-responsive">
+</div>
+<p>
+    Progressive volumetric_photonmapper</br>
+    472 iterations</br>
+    1 sample per pixel per iteration</br>
+    100 000 photons per iteration</br>
+    Surface photon start radius: 0.1</br>
+    Volume photon Knn: 10</br>
+    Spotlight total angle: 20°</br>
+    Spotlight falloff start: 15°</br> 
+</p>
+
+<h2></h2>
+
+<div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+    <img src="images/projector_1_nori_700spp_70Mp.png" alt="nori independent" class="img-responsive">
+</div>
+<p>
+    Progressive volumetric_photonmapper</br>
+    700 iterations</br>
+    1 sample per pixel per iteration</br>
+    100 000 photons per iteration</br>
+    Surface photon start radius: 0.1</br>
+    Volume photon Knn: 10</br>
+    Projection: Checkerboard 2D</br>
+</p>
+
+<h2></h2>
+
+<h3>Henyey-Greenstein phase function</h3>
+
+<p>Relevant files:</p>
+<tt>src/myClasses/henyeyGreenstein.cpp</tt></br>
+</br>
+
+<p>For the Henyey-Greenstein phase function, I again just followed the explanaitions in the lecture slides. To test the correctness of my implementation I integrated this phase function into the <tt>warptest</tt>.</p>
+
+<h2></h2>
+<div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+ <img src="images/hg_1_nori_1000spp.png" alt="nori volume_path_mats" class="img-responsive">
+ <img src="images/hg_1_mitsuba_1000spp.png" alt="mitsuba volpath_simple" class="img-responsive">
+ <img src="images/volume_mats_2_mitsuba_1000spp.png" alt="mitsuba volpath_simple isotropic" class="img-responsive">
+</div>
+<p>
+ Samples per pixel: 1000</br>
+ Medium inside the Sphere:</br>
+ SigmaS: 1.8 1.8 0.2</br>
+ SigmaA: 0.2 0.2 1.8</br>
+ Phase Function: Henyey-Greenstein</br>
+ g = 0.75
+</p>
+
+<h2></h2>
+
+<div class="row">
+ <div class="col-md-6">
+    <img src="images/hg_1_warptest.png" alt="Samples" class="img-responsive">
+
+</div>
+<div class="col-md-6">
+    <img src="images/hg_2_warptest.png" alt="Samples with their according PF value" class="img-responsive">
+</div>
+</div>
+<div class="row">
+ <div class="col-md-6">
+    <img src="images/hg_3_warptest.png" alt="Chi^2 Test" class="img-responsive">
+</div>
+</div>
+
+<h2></h2>
+
+<h3>Heterogeneous Media</h3>
+
+<p>Relevant files:</p>
+<tt>src/myClasses/heterogeneous.cpp</tt></br>
+</br>
+
+<p>My implementation of heterogeneous media is based on the pseudocode for delta tracking for sampling a distance and the ratio tracking estimator for the transmittance calculation, both from the Residual Ratio Tracking for Estimating Attenuation in Participating Media paper from Jan Novák et al <a href="#ref3">[3]</a>.</br>
+  A heterogeneous medium takes two 3D textures as input for <tt>sigmaA</tt> and <tt>sigmaS</tt>.</p>
+
+  <p>Pictures:</p>
+
+  <h2></h2>
+  <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+     <img src="images/heterogeneous_2_nori_1000spp.png" alt="nori heterogeneous" class="img-responsive">
+     <img src="images/volume_mats_2_mitsuba_1000spp.png" alt="mitsuba homogeneous" class="img-responsive">
+ </div>
+ <p>
+     Samples per pixel: 1000</br>
+     Medium inside the Sphere:</br>
+     Heterogeneous, but with the same parameter values everywhere</br>
+     SigmaS: 1.8 1.8 0.2</br>
+     SigmaA: 0.2 0.2 1.8</br>
+     Phase Function: Isotropic</br> 
+ </p>
+
+ <h2></h2>
+ <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+     <img src="images/heterogeneous_6_nori_1000spp.png" alt="nori heterogeneous" class="img-responsive">
+ </div>
+ <p>
+     Samples per pixel: 1000</br>
+     Medium inside the Sphere:</br>
+     Heterogeneous, with exponential decay</br>
+     SigmaS: 1.8 1.8 0.2</br>
+     SigmaA: 0.2 0.2 1.8</br>
+     Phase Function: Isotropic</br> 
+ </p>
+ <h2></h2>
+
+
+ <!-- ================================================================= -->
+ <h2>Final Submission</h2>
+
+<p>The final image shows as intended an Alphorn on a stage with fog. I added projector lights which project swiss flags onto the stage, to emphasize the theme "Made in Switzerland". The disco ball together with the spotlights creates the atmosphere of a pop concert. The spotlights are not coloured as proposed in the beginning, because in my opinion the scene looks more realistic with simple white lights. I wanted to do more realistic looking fog, which has some cloud formations, but I did not manage to do this in time. In the final image I did not use the stratified sampler since I did not integrate it into the photonmapper. The Henyey-Greenstein phase function is also something I did not use in the final image, since I preferre the look of the isotropic one for this scene. Since creating the validation images with nori and mitsuba took me a lot of time, I did not manage to texture and bump map the whole scene as I liked to. I only textured the Alphorn. The scene is render using my progressive volumetric photonmapper.
+    
+
+</p>
+
+ <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 80%; float: left">
+     <img src="images/final_390spp_702Mp.png" alt="nori volumetric_photonmapper" class="img-responsive">
+ </div>
+ <p>
+    Progressive volumetric_photonmapper</br>
+    390 iterations</br>
+    1 sample per pixel per iteration</br>
+    1 200 000 surface photons per iteration</br>
+    600 000 volume photons per iteration</br>
+    Surface photon start radius: 0.2</br>
+    Volume photon start radius: 0.1</br>
+    Heterogeneous Volume everywhere:</br>
+    SigmaS = SigmaA</br>
+    They are both a combination of a constant, exponential density and 3D perlin noise.</br>
+ </p>
+
+ <h2></h2>
+ <a href="images/final_390spp_702Mp.png">High resolution</a>
+ <h2></h2>
+
+ <!-- ================================================================= -->
+ <h2>References</h2>
+
+ [1] <a id="ref1" href="http://www.cs.dartmouth.edu/~wjarosz/publications/jarosz08beam.html"> Wojciech Jarosz, Matthias Zwicker, Henrik Wann Jensen. The Beam Radiance Estimate for Volumetric Photon Mapping. Computer Graphics Forum (Proceedings of Eurographics), 27(2):557–566, April 2008.</a>
+ <h2></h2>	
+ [2] <a id="ref2" href="http://cgg.unibe.ch/publications/2011/progressive-photon-mapping-a-probabilistic-approach"> Claude Knaus, Matthias Zwicker. Progressive Photon Mapping: A Probabilistic Approach. ACM Transactions on Graphics, 30(3), 2011</a>
+ <h2></h2>	
+ [3] <a id="ref3" href="http://www.cs.dartmouth.edu/~wjarosz/publications/novak14residual.html"> Jan Novák, Andrew Selle, Wojciech Jarosz. Residual Ratio Tracking for Estimating Attenuation in Participating Media. ACM Transactions on Graphics (Proceedings of SIGGRAPH Asia), 33(6), November 2014.</a>
+ <h2></h2>
+ [4] <a id="ref4" href="http://pbrt.org"> Physically Based Rendering, Second Edition. From Matt Pharr and Greg Humphreys</a>
+ <h2></h2>
+
+ <!-- ================================================================= -->
+ <h2>Resources</h2>
+
+ <a href="https://github.com/wjakob/nori/tree/master/scenes/pa4/cbox">Cornell box</a>: Was provided with the Nori framework.</br>
+ <a href="http://tf3dm.com/3d-model/concert-venue-stage-64208.html">Stage mesh</a>: Is an c4d, but can be converted with the test version of Cinema 4D.</br>
+ <a href="http://pnn32.deviantart.com/art/Mirror-Disco-Ball-free-3D-model-blend-obj-399179670">Disco ball</a></br>
+ <a href="https://community.renderman.pixar.com/article/114/library-pixar-one-twenty-eight.html">Textures</a>: A really nice texture, bump map and normal map collection.</br>
+ <a href="https://de.wikipedia.org/wiki/Schweiz#/media/File:Flag_of_Switzerland.svg">Swiss flag</a>
+
+
+</div>
+<div style="height: 100px"/>
+</div>
+</div>
+
+
+<!-- Bootstrap core JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="resources/bootstrap.min.js"></script>
+<script src="/js/offcanvas.js"></script>
+<script src="resources/jquery.event.move.js"></script>
+<script src="resources/jquery.twentytwenty.js"></script>
+
+<script>
+	$(window).load(function(){$(".twentytwenty-container").twentytwenty({default_offset_pct: 0.5});});
+</script>
+
+</body>
+</html>

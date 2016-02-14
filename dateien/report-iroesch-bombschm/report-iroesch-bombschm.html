@@ -1,0 +1,634 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="../favicon.ico" />
+
+	<title>Computer Graphics 2015 - Final Project - Classical Elements</title>
+
+	<link href="resources/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/offcanvas.css" rel="stylesheet">
+	<link href="resources/custom2014.css" rel="stylesheet">
+	<link href="resources/twentytwenty.css" rel="stylesheet" type="text/css" />
+
+	<!--><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>--><!--Much fatser loading without mathjax. Remove comment if you want to write mathematical formulas--->
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+</head>
+<body>
+
+  <div class="container headerBar" style="height: 100px">
+    <h1>Final Project - Classical Elements</h1>
+    <h4>Isabelle Roesch &amp; Milan Bombsch</h4>
+  </div>
+
+  <div class="container contentWrapper">
+    <div class="pageContent">
+      <!-- ================================================================= -->
+      <h2>Motivation</h2>
+
+      <div align="center" style="width: 90%; height: 10px; margin: 0 auto; display: block">
+        <div style="width: 42%; float: left">
+          <div class="twentytwenty-container">
+            <img src="images/ville_close_dubrovnik_-_quartier_loge_007_(palais_sponza).jpg" alt="Sponza" class="img-responsive">
+          </div>
+          <a href="http://dominicus.malleotus.free.fr/croatie/img/ville_close_dubrovnik_-_quartier_loge_007_%28palais_sponza%29.jpg">Source</a>
+        </div>
+
+        <div style="width: 45%; float: right">
+          <div class="twentytwenty-container">
+            <img src="images/keris_fire_sword_by_budireve-d55sslf.jpg" alt="Fire sword" class="img-responsive">
+          </div>
+          <a href="http://img14.deviantart.net/5014/i/2012/184/b/c/keris_fire_sword_by_budireve-d55sslf.jpg">Source</a>
+        </div>
+      </div>
+
+      <h2></h2>
+      <p>
+        For the project we wanted to render a scene which consists of a sword in the middle of the Sponza or a similar cathedral. The sword should be on fire or surrounded by fire. Fire will be the only source of light in the scene.</br>
+        This scene matches this years theme as fire is one of the elements. The challenge in this scene is definitly rendering the fire in a realistic way.
+      </p>
+
+      <h1>General</h1>
+      <h3>Participating and emissive media</h3>
+      <p>Relevant files:</p>
+      <tt>include/ourIncludes/medium.h</tt><br/>
+      <tt>include/ourIncludes/phaseFunction.h</tt><br/>
+      <tt>include/ourIncludes/voxelGridTexture.h</tt><br/>
+      <tt>src/ourClasses/emitters/volumeLight.cpp</tt><br/>
+      <tt>src/ourClasses/media/medium.cpp</tt><br/>
+      <tt>src/ourClasses/media/vacuumMedium.cpp</tt><br/>
+      <tt>src/ourClasses/media/homogeneousMedium.cpp</tt><br/>
+      <tt>src/ourClasses/media/heterogeneousMedium.cpp</tt><br/>
+      <tt>src/ourClasses/phaseFunctions/isotropicPhaseFunction.cpp</tt><br/>
+      <tt>src/ourClasses/textures/combinationTexture.cpp</tt><br/>
+      <tt>src/ourClasses/textures/colormapTexture.cpp</tt><br/>
+      <tt>src/ourClasses/textures/voxelGridTexture.cpp</tt><br/>
+      <tt>src/ourClasses/textures/df3VoxelGrid.cpp</tt><br/>
+      <tt>src/ourClasses/textures/mitsubaVoxelGrid.cpp</tt><br/>
+      </br>
+      <p>
+        Each medium - fire, smoke or fog - has a bounding mesh. The path tracer can therefore query each mesh it hits for the inside medium and act according to it. The BSDF we use for those meshes is a dielectric one which has its interior IOR and its exterior IOR set to one so it does not have any effect on the ray passing through.<br/>
+        <br/>
+        Sampling the free flight distance and calculating the transmittance for homogeneous media is done as described in the lecture slides. For heterogeneous media we use the delta tracking for sampling the free flight distance and the ratio tracking estimator to calculate the transmittance. Both algorithms are described in the paper Residual Ratio Tracking for Estimating Attenuation in Participating Media from Jan Novák et al<a href="#ref6">[6]</a>.<br/>
+        <br/>
+        If the medium is emissive the path tracer samples a distance according to the density of the medium (Infinity for a fire without smoke) and adds the radiance of the line segment it passes through. This radiance is estimated by taking one random point on the line segment and multiplying its radiance value by the length of the segment.<br/>
+        <br/>
+        Heterogeneous media can get their sigmaS and sigmaA values from a 2D or 3D texture. A volume emitter can also have a 3D texture as a definition for the radiance. The most used texture in our case are voxel grid textures. We support both Mitsubas voxelgrid format <a href="#ref7">[7]</a> and Povrays DF3 <a href="#ref1">[1]</a> format, but use DF3 throughout this report. For estimating values within one voxel we use trilinear interpolation.<br/>
+        Since the voxel grids from Blender only store floats which convert to colors with equal r, g and b value we implemented a colormap texture which maps a constant color to any RGB value given a map from floats to Colors. With this we can achieve nice and realistic looking flames.
+      </p>
+
+      <!-- ================================================================= -->
+      <div style="margin-top: 50px"/>
+      <h1>Isabelle Roesch</h1>
+      <h2>Simple features</h2>
+      <h3>Depth of field (5pt)</h3>
+	  <p>Relevant files:</p>
+      <tt>src/perspective.cpp</tt></br>
+      </br>
+	  The depth of field is directly implemented in the perspective camera that was already provided. The default value for the camera is a lens with radius 0, so no depth of field. The focal distance and the lens radius can now be adjusted in the scene file. The implementation is taken from the PBRT book. <a href="#ref2">[2]</a>. To validate it, we show a comparison for two camera settings with Mitsuba.<br>
+	  <br>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+        <img src="images/dof1.png" alt="Mine" class="img-responsive">
+		<img src="images/cbox_dof_path_5_5_0_2_mitsuba.png" alt="Mitsuba" class="img-responsive">
+     </div>
+	 <p>
+         Depth of field with lens radius 0.2 and focal distance 5.5, rendered with path MIS with 200 spp.</br>
+     </p>
+	 <h2></h2>
+	 <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+        <img src="images/dof2.png" alt="Mine" class="img-responsive">
+		<img src="images/cbox_dof_path_6_1_0_4_mitsuba.png" alt="Mitsuba" class="img-responsive">
+     </div>
+     <p>
+         Depth of field with lens radius 0.4 and focal distance 6.1, rendered with path MIS with 200 spp.</br>
+     </p>
+	 <h2></h2>
+      <h3>Perlin noise (5pt)</h3>
+	  <p>Relevant files:</p>
+      <tt>src/ourClasses/perlinNoiseTexture.cpp</tt></br>
+      </br>
+	  For the perlin noise, several versions were implemented as a diffuse 3D texture. The parameters can be varied in the scene files. These parameters include colors, stretch factor, scale and type. The types are described here in detail.<br><br>
+  
+	  <div align="left" style="width: 90%; display: inline-block">
+        <div style="width: 42%; float: left; padding-right: 20px">
+          <div class="twentytwenty-container">
+            <img src="images/perlinnoise.png" alt="Perlin Noise" class="img-responsive">
+          </div>
+        </div>
+		<p>
+		<b>Simple Perlin Noise</b><br>
+		<br>
+		The standard perlin noise, following directly Ken Perlins implementation <a href="#ref4">[4]</a>. 
+		</p>
+	  </div>
+	  
+	  <div align="left" style="width: 90%; display: inline-block">
+        <div style="width: 42%; float: left; padding-right: 20px">
+          <div class="twentytwenty-container">
+            <img src="images/marble1.png" alt="Marble" class="img-responsive">
+          </div>
+        </div>
+		<p>
+		<b>Marble V1</b><br>
+		<br>
+		The marble texture is using five octaves of standard perlin noise, a scale and a cosinus function. Pseudocode:<br>
+		<tt>persistence = 0.6<br>
+		octaves = 5<br>
+		frequency = 1<br>
+		amplitude = 1<br>
+		for i = 0..n-1<br>
+		&nbsp frequency = 2^i<br>
+		&nbsp amplitude = persistence^i<br>
+		&nbsp noiseValue += (noise(x, y, z) + 1) * amplitude * 0.5<br>
+		end<br>
+		noiseValue /= octaves<br>
+		noiseValue = 1 - abs(cos(noiseValue * 10))<br>
+		</tt>
+		</p>
+		</p>
+	  </div>
+	  
+	  <div align="left" style="width: 90%; display: inline-block">
+        <div style="width: 42%; float: left; padding-right: 20px">
+          <div class="twentytwenty-container">
+            <img src="images/marble2.png" alt="Marble" class="img-responsive">
+          </div>
+        </div>
+		<p>
+		<b>Marble V2</b><br>
+		<br>
+		This version is using two overlaying perlin noise functions. Pseudocode:<br/>
+		<tt>persistence = 0.6<br>
+		octaves = 6<br>
+		noiseValue = fbm(x, y, z, persistence, octaves)<br>
+		noiseValue /= octaves<br>
+		noiseValue = 1 - abs(cos(noisevalue * 10))<br>
+		if (noiseValue < 0.8) noiseValue /= 5<br>
+		overlay = abs(turbulence(2x, 2y, 2z, persistence, octaves)) / (2*octaves)<br>
+		noiseValue += overlay<br>
+		noiseValue /= 1.5<br>
+		</tt>
+		</p>
+	  </div>
+	  
+	  <div align="left" style="width: 90%; display: inline-block">
+        <div style="width: 42%; float: left; padding-right: 20px">
+          <div class="twentytwenty-container">
+            <img src="images/wood1.png" alt="Light Wood" class="img-responsive">
+			<img src="images/wood2.png" alt="Dark Wood" class="img-responsive">
+          </div>
+        </div>
+		<p>
+		<b>Wood</b><br>
+		<br>
+		To get a wood-like texture from perlin noise, one function was used to get the tree rings, another to get the fine grains. The two images shown in the report are rendered with different colors. Pseudocode:<br/>
+		<tt>persistence = 0.8<br>
+		octaves = 2<br>
+		noiseValue = sin(sqrt(x^2 + y^2) + fbm(x, y, z, persistence, octaves)<br>
+		grains = noise(x, y, z * 7)<br>
+		noiseValue += grains<br>
+		noiseValue /= 3
+		noiseValue = abs(noiseValue)
+		</tt>
+		</p>
+	  </div>
+
+	
+      <h3>Conductors (smooth and rough) (10pt)</h3>
+	  <p>Relevant files:</p>
+	  <tt>metalconstants.h</tt></br>
+      <tt>src/conductor.cpp</tt></br>
+	  <tt>src/roughconductor.cpp</tt></br>
+	  <tt>src/warptest.cpp</tt></br>
+      </br>
+	  The implementation for smooth and rough conductors is taken from the PBRT book. <a href="#ref2">[2]</a>. The material properties for gold, copper and silver are taken from the PBRT website and mapped to the corresponding RGB values. To validate the conductors, a scene is rendered with Mitsuba. To additionally validate the rough conductor BRDF, it was taken into the warptest. <br>
+	  <br>
+	  <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float:left">
+        <img src="images/conductor.png" alt="Mine" class="img-responsive">
+		<img src="images/conductor_mitsuba.png" alt="Mitsuba" class="img-responsive">
+     </div>
+     <p>
+         Conductor cat, smooth gold and conductor spheres, rough silver, alpha from left to right: 0.05, 0.1, 0.2, rendered with path MIS with 500 spp.</br>
+     </p>
+	<h2></h2>
+	 <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float:left">
+        <img src="images/warptest.png" alt="R-Conductor Warptest" class="img-responsive">
+     </div>
+     <p>
+         Warptest for the sampling distribution of the rough conductor</br>
+     </p>
+	 <h2></h2>
+      <h3>Adaptive Sampling (10pt)</h3>
+	  <p>Relevant files:</p>
+      <tt>src/render.cpp</tt></br>
+	  <tt>src/ourIncludes/adaptiveSampler.h</tt></br>
+	  <tt>src/ourClasses/adaptiveSampler.cpp</tt></br>
+      </br>
+	  The adaptive sampling was implemented following the instructions on the paper of Pajot et al. <a><href="#ref3">[3]</a>. The main idea is to cache the variance of each sampled pixel and importance sample the pixel according to this variance - the more variance, the more samples are placed there. One spp-round is always distributed equally on all pixels, the second one is distributed according to the variance of the pixel. <br>
+	  <br>
+	  The feature can be turned on or off in the render.cpp file and it is split into two parts. One is the adaptive sampling based on the variance of a specific pixel, the second option is taking the neighbourhood of that pixel also into account, as described in the paper. The conclusion of implementing that feature is that using adaptive sampling is slower than not using it and there are scenes that really profit from the adaptive sampling and others that do not. A scene with a lot of pixels that always evaluate to the same or nearly the same color is converging a lot faster with adaptive sampling than without, but for all "normal" scenes that we tested, the adaptive sampling doesn't help much.<br>
+	  <br>
+	  To illustrate the effect, we also output a .png file that shows where the adaptive sampler placed its samples. These pictures are shown in the report.<br>
+	  <br>
+	   <br>
+	  <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 20px; width: 70%; float:left">
+        <img src="images/as_1.png" alt="AS" class="img-responsive">
+		<img src="images/as_none_1.png" alt="No AS" class="img-responsive">
+		<img src="images/as_dist_1.png" alt="AS Distribution" class="img-responsive">
+     </div>
+	 <p>
+		Rendering times: 
+		<ul>
+		<li>No AS: 2:20</li>
+		<li>AS: 3:18</li>
+		</ul>
+		The adaptive sampler prefers the caustics and neglects the black part of the image or the light, which converge very fast. But the effect for the resulting picture is not as good as was hoped for.
+	 </p>
+	 <h2></h2>
+	 <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 20px; width: 70%; float:left">
+        <img src="images/as_2.png" alt="AS" class="img-responsive">
+		<img src="images/as_none_2.png" alt="No AS" class="img-responsive">
+		<img src="images/as_dist_2.png" alt="AS Distribution" class="img-responsive">
+     </div>
+	 <p>
+	 </p>
+		Rendering times:
+		<ul>
+		<li>No AS: 0:06</li>
+		<li>AS: 0:36</li>
+		</ul>
+		The effect of the adaptive sampler can be seen better when a big part of the image has variance 0. It really helps for such a scene, but rendering something like this is not a very frequent case.
+     <p>
+	 <h2></h2>
+      <h2>Advanced features</h2>
+      <h3>Path MATS for heterogeneous, emissive volumes (30pt)</h3>
+	  <p>Relevant files:</p>
+      <tt>src/ourClasses/integrators/volume_mats.cpp</tt></br>
+      </br>
+	  
+	  To render fire and smoke, we first implemented a MATS integrator that handles heterogenous volumes with absorption, scattering and emission. <br>The implementation is based on the pseudocode on the slides (Participating Media I, Slide 119). Interacting with a surface is handled using the code of the MATS path tracer from the exercises. When the path stops in a medium, a new direction is sampled and a color is calculated based on the sigmaS and sigmaT of the medium. When the medium emits light, its radiance is evaluated by taking the radiance of one point on the ray and multiplying it with the distance of the ray inside the medium. <br>
+	  <br>
+	  
+	  Absorption and scattering could be validated using Mitsubas volpath integrator, as displayed in the images below. Emission was not validated because we tweak our heat voxel grids anyway using a scale factor and a colormap. Further pictures of the volumetric MATS path integrator in action can be seen in the EMS and MIS section.<br>
+      <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/cbox_volume_mats_scattering_1024spp_5h46m.png" alt="volume_mats" class="img-responsive">
+        <img src="images/cbox_mitsuba_scattering.png" alt="mitsuba volpath_simple" class="img-responsive">
+     </div>
+     <p>
+		Scattering<br>
+        Samples per pixel: 1024</br>
+        SigmaS: 1, 1, 1<br/>
+        SigmaA: 0, 0, 0
+     </p>
+
+     <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/cbox_volume_mats_absorption_1024spp_5h16m.png" alt="volume_mats" class="img-responsive">
+        <img src="images/cbox_mitsuba_absorption.png" alt="mitsuba volpath_simple" class="img-responsive">
+     </div>
+     <p>
+		Absorption<br>
+        Samples per pixel: 1024<br/>
+        SigmaS: 0, 0, 0<br/>
+        SigmaA: 1, 1, 1
+     </p>
+
+
+     <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/cbox_volume_mats_both_1024spp_0h42m.png" alt="volume_mats" class="img-responsive">
+        <img src="images/cbox_mitsuba_both.png" alt="mitsuba volpath_simple" class="img-responsive">
+     </div>
+     <p>
+		Scattering and Absorption<br>
+        Samples per pixel: 1024</br>
+        SigmaS: 0.58, 0.05, 1<br/>
+        SigmaA: 0.42, 0.95, 0
+     </p>
+
+
+      <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/blender_only_fire_cbox_vio_mats_1024spp_1h18m.png" alt="volume_mats" class="img-responsive">
+     </div>
+     <p>
+		Emission<br>
+         Samples per pixel: 1024</br>
+     </p>
+	 <h2>Other features</h2>
+      <div style="margin-left: 2%">
+      <ul>
+      <li><b>Colormap Texture:</b> To render the fire in different colors, a colormap was implemented to map the heat/density values from the voxel grid to color values that are linearly interpolated. This texture can be used with a combination texture to feed the output of one texture into the input of another. It would also be possible to map perlin noise values to colors, for instance.</li>
+      <li><b>Checkerboard 3D:</b> The checkerboard texture was extended to a 3D version.</li>
+      <li><b>Textured Microfacet:</b> The microfacet texture is now able to take a  texture as an argument. If it is set, the microfacet will evaluate its k_d from the texture and recalculate its  k_s for each sample.</li>
+      </ul>
+      </div>
+
+      <h2></h2>
+      <div style="margin-top: 100px"/>
+      <h1>Milan Bombsch</h1>
+
+
+      <h2></h2>
+      <h2>Moderate features</h2>
+      <h3>Blender exporter (15pt)</h3>
+      
+      <p>Relevant files:</p>
+      <tt>nori_export/README.md</tt></br>
+      <tt>nori_export/__init__.py</tt></br>
+      <tt>nori_export/df3.py</tt></br>
+      </br>
+      <p>
+        It is hard to get smoke and fire voxel grids from the internet which fit in our scene. Using blenders smoke and fire simulation we can tweak those in the way we like. The Blender exporter is based on the existing one from Adrien Gruson, but is now much more powerful. It can export the camera position, orientation and aspect ratio, the image resolution, all triangular and quad meshes, point lights, area lights, smoke density voxel grids and fire heat voxel grids. We can even export whole animations. For meshes we export the diffuse color and if it emits light, we add an area emitter with the intensity specified inside Blender. For smoke or fire domains we export the corresponding voxel data into df3 files <a href="#ref1">[1]</a>. We used this data format as there is already a python script which writes df3 files, given an array of floats, included into the Povray exporter for blender. <tt>nori_export/df3.py</tt> is copied from the Povray exporter. For fire we also export the colormap specified in Blender to get coloured fire. </br>
+        We export smoke and fire voxel grids from: <code>bpy.data.objects['Smoke Domain'].modifiers['Smoke'].domain_settings.density_grid / flame_grid</code></br>
+      </p>
+
+      <p>Pictures:</p>
+
+      <h2></h2>
+    
+      <img src="images/Bildschirmfoto 2015-12-16 um 21.36.07.png" alt="" class="img-responsive" style="width: 60%; float: left">
+
+      <img src="images/burningSwordSecond.gif" alt="" class="img-responsive" style="width: 40%; float: right; margin-top: 20px">
+
+      <div style="width: 100%; float: left; margin-left: 3%">
+      <p>
+        This animation was rendered with 120 frames. Each frame took 12 minutes to render with the volume_mis and about 100spp. The source of the voxel data is a fire simulation from blender. The fire does also contain some smoke.
+      </p>
+      </div>
+
+      <img src="images/Bildschirmfoto 2015-12-13 um 14.15.14.png" alt="" class="img-responsive">
+
+      <div style="width: 100%; float: left; margin-left: 3%">
+      <p>
+        The result of this export can be seen in the section about the <tt>volume_mis</tt> integrator.
+      </p>
+      </div>
+
+     <h2></h2>
+      <h3>Voxelgrids with Importance Sampling (15pt)</h3>
+      <p>Relevant files:</p>
+      <tt>src/emitters/volumeLight.cpp</tt></br>
+      </br>
+      <p>
+        Importance sampling the voxel grid which defines the emission of a fire can greatly improve the convergence rate for the <tt>volume_ems</tt> and the <tt>volume_mis</tt> integrators. Since we do not use the pure voxel grid data, but scale and manipulate its values to get a nice looking fire, we decided to do the importance sampling at the level of the volume emitter itself. The volume emitter creates 3 pdfs for X, Y given X and Z given X and Y, which depend on the luminance value of the radiance texture at grid points. This is done similar as in PBRT section 13.6.5<a href="#ref2">[2]</a>. As a default grid resolution we use 200 x 200 x 200, since we do not use voxel grids with a higher resolution than this.
+      </p>
+
+      <p>Pictures:</p>
+
+      <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/blender_only_fire_cbox_vio_ems_10spp_0h0m_withoutIS.png" alt="volume_ems without IS" class="img-responsive">
+         <img src="images/blender_only_fire_cbox_vio_ems_10spp_0h0m_withIS.png" alt="volume_ems with IS" class="img-responsive">
+         <img src="images/blender_only_fire_cbox_vio_mis_10spp_0h0m_withoutIS.png" alt="volume_mis without IS" class="img-responsive">
+         <img src="images/blender_only_fire_cbox_vio_mis_10spp_0h0m_withIS.png" alt="volume_mis with IS" class="img-responsive">
+     </div>
+     <p>
+        Emission only<br/>
+         Samples per pixel: 10</br>
+         Grid resolution for IS: 200 x 200 x 200</br>
+         IS = Importance sampling the volume light source
+     </p>
+
+     <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/blender_only_fire_cbox_vio_ems_1024spp_1h41m_withoutIS.png" alt="volume_ems without IS" class="img-responsive">
+         <img src="images/blender_only_fire_cbox_vio_ems_1024spp_2h2m_withIS.png" alt="volume_ems with IS" class="img-responsive">
+         <img src="images/blender_only_fire_cbox_vio_mis_1024spp_2h11m_withoutIS.png" alt="volume_mis without IS" class="img-responsive">
+         <img src="images/blender_only_fire_cbox_vio_mis_1024spp_2h42m_withIS.png" alt="volume_mis with IS" class="img-responsive">
+     </div>
+     <p>
+        Emission only<br/>
+         Samples per pixel: 1024</br>
+         Grid resolution for IS: 200 x 200 x 200</br>
+         IS = Importance sampling the volume light source
+     </p>
+
+     <h2></h2>
+      <h2>Advanced features</h2>
+      <h3>Path MIS for heterogenous, emissive volumes (30pt)</h3>
+      <b>path_ems</b>
+      <p>Relevant files:</p>
+      <tt>src/integrators/path_ems.cpp</tt></br>
+      </br>
+
+      <p>
+        To get a better understanding how the MIS works and how it combines an EMS and a MATS integrator, I programmed a path_ems and validated it with the existing scenes from Programming Assignment 4.
+      </p>
+
+      <h2></h2>
+      <b>volume_ems</b>
+      <p>Relevant files:</p>
+      <tt>src/integrators/volume_ems.cpp</tt></br>
+      </br>
+
+      <p>
+        The <tt>volume_ems</tt> integrator can handle participating media and emissive media. It is slower than the <tt>volume_mats</tt> (up to 5 times) since it does shadow connections through participating media and therefore needs to calculate transmittance even if the current shading point is inside vacuum. The <tt>volume_ems</tt> converges faster than the <tt>volume_mats</tt> for darker scenes. The <tt>volume_ems</tt> has one draw back: It has a really hard time to converge for scenes which either have a non-specular mesh inside a fire or smoke and fire combined in the same boundary box. In this case it can happen that the emitter sampling chooses a point really close to the shading point (mesh inside fire or on a smoke "particle"). This leads to a very small PDF (as the PDF is multiplied by the distance for a conversion from volume to solid angle sampling). In the integrator we then use radiance divided by PDF which leads to a really high radiance value. Getting rid of those spikes is nearly impossible (and with our constraint rendering time it was). 
+      </p>
+
+      <h2></h2>
+      <b>volume_mis</b>
+      <p>Relevant files:</p>
+      <tt>src/integrators/volume_mis.cpp</tt></br>
+      </br>
+
+      <p>
+        The <tt>volume_mis</tt> does at every shading point no matter if we are on a surface or inside a volume an emitter sampling estimation of the radiance and a material based estimate and combines them. The combination of the two estimates involves the respective PDFs. It also makes this integrator much slower than the volume_mats (up to 7 times)<br/> 
+
+        This is easy for the emitter sampling part as the pdf_emitter is then simply the PDF of choosing this point on or inside the emitter divided by the number of emitters in the scene and the pdf_material is either the PDF of the BSDF or the phase function. <br/>
+        For the material sampling part the pdf_material is also simply the PDF of the BSDF or the phase function, but the pdf_emitter is complicated in this case. Also the value of radiance_emitter in the material sampling part is not trivial. We calculate both in the following way: Choose a direction according to the BSDF. Walk along this direction till a solid surface is hit. Each time we hit a volume emitter we choose a random sample along the line segment inside the emitter and add its PDF to the pdf_emitter and its radiance * transmittance to the radiance_emitter. If we hit an area emitter we also add its pdf value to pdf_emitter and its radiance * transmittance to radiance_emitter.<br/>
+
+        This approach of calculating the pdf_emitter in the material sampling part is not well founded mathematically and is probably not correct. Nevertheless we achieve good results with this strategy as can be seen below.<br/>
+        As a guideline we used a Technical Memo from Pixar<a href="#ref5">[5]</a>.
+      </p>
+
+      <p>Pictures:</p>
+
+      <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/cbox_path_ems_1024spp_0h58m.png" alt="path_ems" class="img-responsive">
+         <img src="images/cbox_path_mis_1024spp_2h7m.png" alt="path_mis" class="img-responsive">
+         <img src="images/cbox_volume_ems_1024spp_1h25m.png" alt="volume_ems" class="img-responsive">
+         <img src="images/cbox_volume_mis_1024spp_2h42m.png" alt="volume_mis" class="img-responsive">
+     </div>
+     <p>
+         Samples per pixel: 1024</br>
+         The <tt>path_mis</tt> is the one from Programming Assignment 4.
+     </p>
+
+     <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/cbox_volume_ems_scattering_1024spp_7h43m.png" alt="volume_ems" class="img-responsive">
+         <img src="images/cbox_volume_mis_scattering_1024spp_9h13m.png" alt="volume_mis" class="img-responsive">
+        <img src="images/cbox_mitsuba_scattering.png" alt="mitsuba volpath_simple" class="img-responsive">
+     </div>
+      <p>
+        Scattering<br/>
+        Samples per pixel: 1024</br>
+        SigmaS: 1, 1, 1<br/>
+        SigmaA: 0, 0, 0
+     </p>
+
+      <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/cbox_volume_ems_absorption_1024spp_6h59m.png" alt="volume_ems" class="img-responsive">
+         <img src="images/cbox_volume_mis_absorption_1024spp_8h26m.png" alt="volume_mis" class="img-responsive">
+         <img src="images/cbox_mitsuba_absorption.png" alt="mitsuba volpath_simple" class="img-responsive">
+     </div>
+     <p>
+        Absorbtion<br/>
+        Samples per pixel: 1024</br>
+        SigmaS: 0, 0, 0<br/>
+        SigmaA: 1, 1, 1
+     </p>
+
+     <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+         <img src="images/cbox_volume_ems_both_1024spp_1h33m.png" alt="volume_ems" class="img-responsive">
+         <img src="images/cbox_volume_mis_both_1024spp_1h51m.png" alt="volume_mis" class="img-responsive">
+         <img src="images/cbox_mitsuba_both.png" alt="mitsuba volpath_simple" class="img-responsive">
+     </div>
+     <p>
+        Scattering and Absorbtion<br/>
+        Samples per pixel: 1024</br>
+        SigmaS: 0.58 0.05 1<br/>
+        SigmaA: 0.42 0.95 0
+     </p>
+
+     <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+        <img src="images/cbox_smoke_and_fire_mats_1024spp_0h55m.png" alt="volume_mats" class="img-responsive">
+        <img src="images/cbox_smoke_and_fire_ems_1024spp_2h46m.png" alt="volume_ems" class="img-responsive">
+        <img src="images/cbox_smoke_and_fire_mis_1024spp_5h5m.png" alt="volume_mis" class="img-responsive">
+     </div>
+     <p>
+        Scattering, Absorbtion and Emission<br/>
+         Samples per pixel: 1024</br>
+     </p>
+
+     <h2></h2>
+      <div class="twentytwenty-container" style="margin-left: 0px; margin-right: 10px; width: 70%; float: left">
+        <img src="images/cbox_smoke_and_fire_mats_354spp_0h5m.png" alt="volume_mats" class="img-responsive">
+        <img src="images/cbox_smoke_and_fire_ems_96spp_0h5m.png" alt="volume_ems" class="img-responsive">
+        <img src="images/cbox_smoke_and_fire_mis_61spp_0h5m.png" alt="volume_mis" class="img-responsive">
+     </div>
+     <p>
+        Scattering, Absorbtion and Emission<br/>
+        Running time for each integrator: 5 minutes</br>
+        Samples per pixel (volume_mats): 354</br>
+        Samples per pixel (volume_ems): 96</br>
+        Samples per pixel (volume_mis): 61</br>
+     </p>
+
+      <h2></h2>
+
+      <h2>Other features</h2>
+      <div style="margin-left: 2%">
+      <ul>
+      <li><b>Infinity rendering:</b> Render till the user stops the rendering process manually. This is enabled if the number of specified samples per pixel is 0.</li>
+      <li><b>Time constraint rendering:</b> Add a time limit in seconds to the XML file to ensure that the rendering will stop after this time limit has been reached</li>
+      <li><b>Elapsed and remaining time display:</b> In the command line the elapsed and an estimate of the remaining time is displayed.</li>
+      <li><b>NoGUI:</b> ./nori scene.xml --nogui starts the rendering process without the GUI. The process will stop when the rendering is done.</li>
+      <li><b>Backups:</b> Every 2 hours the state of the current rendering is saved to an EXR file. This saves work in case of a crash and visualizes the progress of overnight renderings.</li>
+      </ul>
+      </div>
+      <div style="margin-top: 100px"/>
+      <h1>Final Image - Sibenik Cathedral with a burning sword</h1>
+
+      <p>
+        We rendered our final scene with both <tt>volume_mats</tt> and <tt>volume_mis</tt> to see which results in a better image. The <tt>volume_mats</tt> produced a better result since it produced 6 times more samples per pixel than the volume_mis in the same time and since the scene has lots of specular materials the <tt>volume_mis</tt> could not compensate this. We didn't use our adaptive sampling method since it tends to focus more on bright than on darker pixels and has of course a computational overhead. 
+      </p>
+
+       <img src="images/scene_33688spp_48h1m.png" alt="nori volumetric_photonmapper" class="img-responsive" style="margin-left: 0px; margin-right: 10px; width: 80%; float: left">
+       <p>
+          <tt>volume_mats</tt><br/>
+          Without Adaptive Sampling<br/>
+          With importance sampling of the volume emitters<br/>
+          33'688 samples per pixel<br/>
+          48 hours of rendering on a single machine<br/>
+          No absorbing/scattering media, only emissive media<br/>
+          No other light sources than the fires<br/>
+          BSDFs: Diffuse, Microfacet, Conductor, Rough-Conductor, Mirror<br/>
+          Textures: Perlin noise (Wood, Marble), 3D Checkerboard<br/>
+       </p>
+
+       <h2></h2>
+       <a href="images/scene_33688spp_48h1m.png">High resolution version</a>
+       <h2></h2>
+
+
+       <div style="margin-top: 50px"/>
+      <h2>References</h2>
+
+      [1] <a id="ref1" href="http://povray.org/documentation/view/3.6.1/374/"> 
+        Specification of the Povray DF3 density (volumetric) format
+      </a>
+      <h2></h2>
+
+     [2]<a id="ref2" href="http://www.pbrt.org"> 
+        Physically Based Rendering, Second Edition by Matt Pharr and Greg Humphreys.
+      </a>
+      <h2></h2>
+	  
+	  [3] <a id="ref3" href="http://dl.acm.org/citation.cfm?id=2073359&dl=ACM&coll=DL&CFID=567477124&CFTOKEN=56228212"> 
+        Robust Adaptive Sampling For Monte-Carlo-Based Rendering, Pajot et al. 2011
+      </a>
+      <h2></h2>
+	  
+    [4]<a id="ref4" href="http://cs.nyu.edu/~perlin/noise/"> 
+        Perlin Noise, Ken Perlin
+      </a>
+      <h2></h2>
+
+    [5]<a id="ref5" href="http://jcgt.org/published/0002/02/10/"> 
+        Multiple Importance Sampling for Emissive Effects, Ryusuke Villemin and Christophe Hery, Pixar Technical Memo 13-02
+      </a>
+      <h2></h2>
+
+      [6] <a id="ref6" href="http://www.cs.dartmouth.edu/~wjarosz/publications/novak14residual.html"> Jan Novák, Andrew Selle, Wojciech Jarosz. Residual Ratio Tracking for Estimating Attenuation in Participating Media. ACM Transactions on Graphics (Proceedings of SIGGRAPH Asia), 33(6), November 2014.</a>
+      <h2></h2>
+
+      [7] <a id="ref7" href="http://www.mitsuba-renderer.org/"> Mitsuba - A Physically Based Renderer by Wenzel Jakob</a>
+      <h2></h2>
+
+      <h2>Resources</h2>
+
+      <a href="http://www.mitsuba-renderer.org/">Mitsuba</a>: A free and open source renderer which we use to validate our implementations, by comparing the produced results of both renderers.<br/><br/>
+
+      <a href="http://www.blender.org/">Blender</a>: A free and open source modeling, animation and rendering tool.<br/><br/>
+
+      <div>The cat, torches, carpet and the sword meshes were created by Isabelle Roesch during this project.</div><br/>
+
+      <a href="http://graphics.cs.williams.edu/data/meshes.xml">Sibenik Cathedral</a>: A freely available obj mesh of the Sibenik Cathedral. The cathedral was refactored and tweaked to fit our needs.</br><br/>
+
+      <a href="http://archive3d.net/?a=download&id=4ca41312">Mirror</a>: The mirror on the left in our final image.</br><br/>
+
+      <div style="margin-top: 100px"/>
+      <p>The time values in the file names of the renderings include rendering multiple images at the same time and are therefore not representative for the performance of our renderer. An exception are the running times mentioned in this report.</p>
+
+      <h2></h2>
+
+    </div>
+  </div>
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="resources/bootstrap.min.js"></script>
+  <script src="/js/offcanvas.js"></script>
+  <script src="resources/jquery.event.move.js"></script>
+  <script src="resources/jquery.twentytwenty.js"></script>
+
+  <script>
+  	$(window).load(function(){$(".twentytwenty-container").twentytwenty({default_offset_pct: 0.5});});
+  </script>
+</body>
+</html>

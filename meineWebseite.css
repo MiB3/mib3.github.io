@@ -1,0 +1,169 @@
+
+.color-primary-0 { color: #88C4FE }
+.color-primary-1 { color: #F7FBFF }
+.color-primary-2 { color: #B6DBFF }
+.color-primary-3 { color: #60AFFC }
+.color-primary-4 { color: #3898F5 }
+
+body {
+	background-color: #88C4FE;
+	padding: 0px; 
+	margin: 0px;
+	font-family: "Helvetica Neue", Helvetica, sans-serif;
+	font-size: 18px;
+}
+
+h1 {
+	text-align: center;
+	margin-bottom: 80px;
+	color: #017cf2;
+	background: repeating-linear-gradient(
+		110deg,
+		rgba(200, 200, 200, 0.3),
+		rgba(200, 200, 200, 0.3) 20px,
+		rgba(220, 220, 220, 0.3) 10px,
+		rgba(220, 220, 220, 0.3) 40px	
+	);
+	padding-top: 50px;
+	padding-bottom: 50px;
+	border-bottom: 1px solid black;
+	font-size: 30px;
+}
+
+h2 {
+	margin-bottom: 40px;
+	margin-top: 30px;
+	font-size: 24px;
+}
+
+ul {
+	list-style-type: none;
+	margin-bottom: 50px;
+}
+
+li {
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+/* classes */
+
+.link {
+	text-decoration: none;
+	color: #017cf2;
+}
+
+.link:hover {
+	text-decoration: underline;
+}
+
+.button {
+  margin: 10px;
+  color: white;
+  text-shadow: 0px 1px 0px gray;
+  background: #339bff;
+  padding: 6px 15px 6px 15px;
+  outline: none;
+  border-radius: 3px;
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.button:hover {
+	background: #88c4fe;
+}
+
+.button:active {
+	top: 1px;
+	position: relative;
+}
+
+.course {
+	margin: 5px;
+	margin-top: 40px;
+	margin-bottom: 10px;
+	font-weight: bold;
+	color: #017cf2;
+}
+
+.course-detail {
+	margin: 5px;
+	margin-top: -5px;
+	line-height: 150%;
+}
+
+.course-authors {
+	margin: 5px;
+	font-size: 90%;
+}
+
+/* IDs */
+#mainFrame {
+	background-color: white; 
+	width: 70%; 
+	min-width: 400px; 
+	margin-top: 0px; 
+	margin-bottom: 0px; 
+	margin-left: auto; 
+	margin-right: auto; 
+	padding-bottom: 0px;
+}
+
+#content {	
+	padding-left: 10%;
+	padding-right: 10%;
+}
+
+#logo {
+	width: 20%;
+	min-width: 100px;
+	max-width: 120px;
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#subheading {
+	margin-top: -40px;
+	margin-bottom: 40px;
+	font-size: 95%;
+}
+
+@media screen and (max-width: 1000px) {
+	#mainFrame {
+		width: 85%;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#mainFrame {
+		width: 100%;
+	}
+}
+
+@media screen and (max-device-width: 640px) {
+  /*--- iPhone only CSS here ---*/
+
+  body {
+  	font-size: 40px;
+  }
+
+  h1 {
+  	font-size: 60px;
+  }
+
+  h2 {
+  	font-size: 60px;
+  }
+
+  a {
+	  margin: 20px;
+	  padding: 20px 30px 20px 30px;
+	  border-radius: 3px;
+  }
+
+  #mainFrame {
+  	width: 100%;
+  }
+}
