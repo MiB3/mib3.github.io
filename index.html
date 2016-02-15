@@ -1,5 +1,7 @@
 <html>
 <head>
+<meta charset="utf-8"/>
+
 <link href="meineWebseite.css" rel="stylesheet" type="text/css"/>
 <link rel="stylesheet" href="font-awesome-4.5.0/css/font-awesome.min.css">
 
@@ -19,95 +21,135 @@
 <body ontouchstart>
 
 <div id="mainFrame">
-	<h1>Milan Bombsch</h1>
+	<h1 name="top">Milan Bombsch</h1>
 	
 	<div id="content">
 
 	<h2>Studium</h2>
-	<div id="subheading">an der ETH Z&uuml;rich</div>
+	<div class="subheading">an der ETH Z&uuml;rich</div>
 
 	<ul>
 
 		<li>
- 			<div class="course">Computer Graphics HS15</div>
- 			<div class="course-detail">Rendering: Sibenik Cathedral with a burning sword<br/>
- 			3ter Platz beim Rendering Wettbewerb</div>
- 			<div class="course-authors">Zusammen mit Isabelle Roesch</div>
- 			<a class="button" target="_parent" href="https://graphics.ethz.ch/teaching/cg15/www-nori/index.html#project">Rendering Wettbewerb</a>
- 			<a class="button" href="dateien/report-iroesch-bombschm/images/scene_33688spp_48h1m.png">Bild 4MB</a>
- 			<a class="button" href="dateien/report-iroesch-bombschm/report-iroesch-bombschm.html">Report 50MB</a>
+			<div class="course-picture-container">
+				<a href="dateien/report-iroesch-bombschm/images/scene_33688spp_48h1m.png">
+					<img src="images/cg.png" class="course-picture"/>
+				</a>
+			</div>
+			<div class="course-text">
+	 			<div class="course-title">Computer Graphics HS15</div>
+	 			<div class="course-detail">
+	 				Rendering: Sibenik Cathedral with a burning sword<br/>
+	 				3ter Platz beim Rendering Wettbewerb
+	 			</div>
+	 			<div class="course-authors">Zusammen mit Isabelle Roesch</div>
+	 			<a class="button" target="_parent" href="https://graphics.ethz.ch/teaching/cg15/www-nori/index.html"><i class="fa fa-university"></i> Rendering Wettbewerb</a>
+	 			<a class="button" href="dateien/report-iroesch-bombschm/images/scene_33688spp_48h1m.png">Bild 4MB</a>
+	 			<a class="button" href="dateien/report-iroesch-bombschm/report-iroesch-bombschm.html">Report 50MB</a>
+ 			</div>
  		</li>
 
 		<li>
- 			<div class="course">Computational Intelligence Lab FS15</div>
- 			<div class="course-detail">Paper: PCA For Image Compression Extended with Shearing and Rectanglular Patch Sizes</div>
- 			<div class="course-authors">Zusammen mit <a class="link" href="http://tizianzeltner.com/">Tizian Zeltner</a> und Rafael H&auml;uselmann</div>
- 			<a class="button" href="dateien/report-cil.pdf">Paper 1.4MB</a>
+			<div class="course-picture-container">
+				<a href="images/cil.png">
+					<img src="images/cil.png" class="course-picture"/>
+				</a>
+			</div>
+			<div class="course-text">
+	 			<div class="course-title">Computational Intelligence Lab FS15</div>
+	 			<div class="course-detail">Paper: PCA For Image Compression Extended with Shearing and Rectanglular Patch Sizes</div>
+	 			<div class="course-authors">Zusammen mit <a class="link" href="http://tizianzeltner.com/">Tizian Zeltner</a> und Rafael H&auml;uselmann</div>
+	 			<a class="button" href="dateien/report-cil.pdf">Paper 1.4MB</a>
+ 			</div>
  		</li>
 
  		<li>
- 			<div class="course">Image Synthesis FS15</div>
+ 			<div class="course-picture-container">
+ 				<a href="dateien/Report-IS/images/final_390spp_702Mp.png">
+					<img src="images/is.png" class="course-picture"/>
+				</a>
+			</div>
+			<div class="course-text">
+ 			<div class="course-title">Image Synthesis FS15</div>
  			<div class="course-detail">Rendering: Ein Alphorn auf einer B&uuml;hne<br/>
  			3ter Platz beim Rendering Wettbewerb</div>
- 			<a class="button" target="_parent" href="https://graphics.ethz.ch/teaching/imsynth15/competition/competition.php">Rendering Wettbewerb</a>
+ 			<a class="button" target="_parent" href="https://graphics.ethz.ch/teaching/imsynth15/competition/competition.php"><i class="fa fa-university"></i> Rendering Wettbewerb</a>
  			<a class="button" href="dateien/Report-IS/images/final_390spp_702Mp.png">Bild 1.4MB</a>
  			<a class="button" href="dateien/Report-IS/report-milan-bombsch.html">Report 17.5MB</a>
+ 			</div>
  		</li>
 
 		<li>
- 			<div class="course">Physically-based Simulation HS14</div>
+			<div class="course-picture-container">
+				<a href="images/pbs-full.png">
+					<img src="images/pbs.png" class="course-picture"/>
+				</a>
+			</div>
+			<div class="course-text">
+ 			<div class="course-title">Physically-based Simulation HS14</div>
  			<div class="course-detail">Simulation von Kreiseln</div>
  			<div class="course-authors">Zusammen mit <a class="link" href="http://tizianzeltner.com/">Tizian Zeltner</a></div>
  			<a class="button" target="_parent" href="https://www.youtube.com/watch?v=vEoIFi5xuzk"><i class="fa fa-youtube-play"></i> Projektvideo</a>
  			<a class="button" target="_parent" href="https://github.com/tizian/Spinning-Top-Simulation"><i class="fa fa-github"></i> GitHub</a>
+ 			</div>
  		</li>
 		
 		<li>
- 			<div class="course">Bachelor Arbeit FS14<br/>Augmenting Ubiquitous City Elements for Mobile City-Wide AR Games</div>
- 			<div class="course-detail">GnomeTrader, ein Augmented Reality Spiel f&uuml;r Smartphones.</div>
- 			<a class="button" href="dateien/bachelor-thesis.pdf">PDF 18.5MB</a>
- 			<a class="button" target="_parent" href="https://www.youtube.com/watch?v=gG5A48M6Dyc"><i class="fa fa-youtube-play"></i> Game Trailer</a>
- 			<a class="button" target="_parent" href="http://mediafi.org/online-massive-multiplayer-augmented-reality-city-wide-game-created-fiware-technologies/">GnomeTrader @ FI Content</a>
- 			<a class="button" target="_parent" href="http://mediafi.org/the-gnome-trader-ar-game-presented-at-eurographics-2015/">Artikel Eurographics 2015</a>
+			<div class="course-picture-container">
+				<a href="images/ba-full.png">
+					<img src="images/ba.png" class="course-picture"/>
+				</a>
+			</div>
+			<div class="course-text">
+	 			<div class="course-title">Bachelor Arbeit FS14<br/>Augmenting Ubiquitous City Elements for Mobile City-Wide AR Games</div>
+	 			<div class="course-detail">GnomeTrader, ein Augmented Reality Spiel f&uuml;r Smartphones.</div>
+	 			<a class="button" href="dateien/bachelor-thesis.pdf">PDF 18.5MB</a>
+	 			<a class="button" target="_parent" href="https://www.youtube.com/watch?v=gG5A48M6Dyc"><i class="fa fa-youtube-play"></i> Game Trailer</a>
+	 			<a class="button" target="_parent" href="http://mediafi.org/online-massive-multiplayer-augmented-reality-city-wide-game-created-fiware-technologies/">GnomeTrader @ FI Content</a>
+	 			<a class="button" target="_parent" href="http://mediafi.org/the-gnome-trader-ar-game-presented-at-eurographics-2015/">Artikel Eurographics 2015</a>
+ 			</div>
  		</li>
  		
  		<li>
- 			<div class="course">Lecture with Computer Exercises: Modelling and Simulating Social Systems with MATLAB HS13</div>
- 			<div class="course-detail">Paper: The Second-Order Tocqueville Paradox.<br/>How Social Inequality and Class-Dependent Decisions
-May Dampen Frustration - An Agent-Based Simulation</div>
-<div class="course-authors">Zusammen mit Joel Berger und Dai Zhonghuan</div>
- 			<a class="button" href="dateien/ReportTocqueville.pdf">PDF 1.3MB</a>
- 			<a class="button" target="_parent" href="https://github.com/MiB3/project_Tocqueville_msssm"><i class="fa fa-github"></i> GitHub</a>
+ 			<div class="course-picture-container">
+ 				<a href="images/msss.png">
+					<img src="images/msss.png" class="course-picture"/>
+				</a>
+			</div>
+			<div class="course-text">
+	 			<div class="course-title">Lecture with Computer Exercises: Modelling and Simulating Social Systems with MATLAB HS13</div>
+	 			<div class="course-detail">Paper: The Second-Order Tocqueville Paradox.<br/>How Social Inequality and Class-Dependent Decisions
+	May Dampen Frustration - An Agent-Based Simulation</div>
+	<div class="course-authors">Zusammen mit Joel Berger und Dai Zhonghuan</div>
+	 			<a class="button" href="dateien/ReportTocqueville.pdf">PDF 1.3MB</a>
+	 			<a class="button" target="_parent" href="https://github.com/MiB3/project_Tocqueville_msssm"><i class="fa fa-github"></i> GitHub</a>
+ 			</div>
  		</li>
 
-
 	</ul>
-
-	<hr/>
 
 	<h2>Sonstiges</h2>
 	<ul>
 		<li>
- 			<a class="button" target="_parent" href="https://mibtheninja.wordpress.com">Der Versuch eines Blogs</a>
+ 			<a class="button" target="_parent" href="https://mibtheninja.wordpress.com"><i class="fa fa-wordpress"></i> Der Versuch eines Blogs</a>
 
- 			<a class="button" target="_parent" href="https://twitter.com/mibtheninja"><i style="font-size: 21px; padding-top: 1.5px;" class="fa fa-twitter"></i></a>
+ 			<a class="button" target="_parent" href="https://twitter.com/mibtheninja"><i style="font-size: 120%; padding-top: 1.5px;" class="fa fa-twitter"></i></a>
 
- 			<a class="button" target="_parent" href="https://www.facebook.com/milan.bombsch"><i style="font-size: 21px; padding-top: 1.5px;" class="fa fa-facebook"></i></a>
+ 			<a class="button" target="_parent" href="https://www.facebook.com/milan.bombsch"><i style="font-size: 120%; padding-top: 1.5px;" class="fa fa-facebook"></i></a>
 
 
- 			<a class="button" target="_parent" href="https://github.com/MiB3"><i style="font-size: 21px; padding-top: 1.5px;" class="fa fa-github"></i></a>
-
- 			<br/>
- 			<a class="button" target="_parent" href="http://cantbeat.ch/">cantbeat blues band</a>
+ 			<a class="button" target="_parent" href="https://github.com/MiB3"><i style="font-size: 120%; padding-top: 1.5px;" class="fa fa-github"></i></a>
  			
  			<br/>
+
+ 			<a class="button" target="_parent" href="http://susannebombsch.de/Shiatsu_-_Susanne_Bombsch/Willkommen.html">Susanne Bombsch</a>
+
  			<a class="button" target="_parent" href="http://bombsch.de">Reinhard Bombsch</a>
-			<a class="button" target="_parent" href="http://susannebombsch.de/Shiatsu_-_Susanne_Bombsch/Willkommen.html">Susanne Bombsch</a>
+			
  		</li>
 	</ul>
 
-
-<img src="MiB-Zweifarbig.png" id="logo"/>
+	<a href="#top"><img src="MiB-Zweifarbig.png" id="logo"/></a>
 
 </div>
 </div>

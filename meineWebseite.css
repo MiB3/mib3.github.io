@@ -1,56 +1,87 @@
 
-.color-primary-0 { color: #88C4FE }
-.color-primary-1 { color: #F7FBFF }
-.color-primary-2 { color: #B6DBFF }
-.color-primary-3 { color: #60AFFC }
-.color-primary-4 { color: #3898F5 }
+/*colors*/
+.color-primary-0, .link:hover { color: #5FAAF2 }
+.color-primary-1 { color: #F3F9FE }
+.color-primary-2 { color: #9CC9F6 }
+.color-primary-3 { color: #288FF2 }
+.color-primary-4, .course-title, .link { color: #027BF0 }
+
+.color-secondary-1-0 { color: #FFD858 }
+.color-secondary-1-1 { color: #FFFCF3 }
+.color-secondary-1-2 { color: #FFE79A }
+.color-secondary-1-3 { color: #FFC919 }
+.color-secondary-1-4 { color: #FFC300 }
+
+.color-secondary-2-0 { color: #FF8E58 }
+.color-secondary-2-1 { color: #FFF7F3 }
+.color-secondary-2-2 { color: #FFBB9A }
+.color-secondary-2-3, .subheading { color: #FF6319 }
+.color-secondary-2-4, h2 { color: #FF5300 }
+
+/*background colors*/
+.color-primary-0-bg, .button:hover { background: #5FAAF2 }
+.color-primary-1-bg { background: #F3F9FE }
+.color-primary-2-bg { background: #9CC9F6 }
+.color-primary-3-bg, h1, .button { background: #288FF2 }
+.color-primary-4-bg { background: #027BF0 }
+
+.color-secondary-1-0-bg { background: #FFD858 }
+.color-secondary-1-1-bg { background: #FFFCF3 }
+.color-secondary-1-2-bg { background: #FFE79A }
+.color-secondary-1-3-bg { background: #FFC919 }
+.color-secondary-1-4-bg { background: #FFC300 }
+
+.color-secondary-2-0-bg { background: #FF8E58 }
+.color-secondary-2-1-bg { background: #FFF7F3 }
+.color-secondary-2-2-bg { background: #FFBB9A }
+.color-secondary-2-3-bg { background: #FF6319 }
+.color-secondary-2-4-bg { background: #FF5300 }
+
+/*tags*/
 
 body {
-	background-color: #88C4FE;
+	background-color: #DDD;
 	padding: 0px; 
 	margin: 0px;
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
 	font-size: 18px;
+
 }
 
 h1 {
+	color: white;
 	text-align: center;
-	margin-bottom: 80px;
-	color: #017cf2;
-	background: repeating-linear-gradient(
-		110deg,
-		rgba(200, 200, 200, 0.3),
-		rgba(200, 200, 200, 0.3) 20px,
-		rgba(220, 220, 220, 0.3) 10px,
-		rgba(220, 220, 220, 0.3) 40px	
-	);
+	margin-bottom: 60px;
 	padding-top: 50px;
 	padding-bottom: 50px;
-	border-bottom: 1px solid black;
-	font-size: 30px;
+	font-size: 170%;
 }
 
 h2 {
-	margin-bottom: 40px;
-	margin-top: 30px;
-	font-size: 24px;
+	margin-bottom: 0px;
+	margin-top: 50px;
+	font-size: 130%;
+	display: inline-block;
 }
 
 ul {
 	list-style-type: none;
 	margin-bottom: 50px;
+	padding-left: 0px;
+	float: none;
 }
 
 li {
 	margin-top: 20px;
 	margin-bottom: 20px;
+	width: 100%;
+	float: left;
 }
 
 /* classes */
 
 .link {
 	text-decoration: none;
-	color: #017cf2;
 }
 
 .link:hover {
@@ -61,17 +92,13 @@ li {
   margin: 10px;
   color: white;
   text-shadow: 0px 1px 0px gray;
-  background: #339bff;
   padding: 6px 15px 6px 15px;
   outline: none;
   border-radius: 3px;
   text-decoration: none;
   white-space: nowrap;
   display: inline-block;
-}
-
-.button:hover {
-	background: #88c4fe;
+  font-size: 90%;
 }
 
 .button:active {
@@ -79,12 +106,37 @@ li {
 	position: relative;
 }
 
-.course {
+.course-picture-container {
+	width: 20%;
+	float: left;
+}
+
+.course-picture {
+	width: 100%;
+	border: 2px solid black;
+	border-radius: 10px;
+	margin-top: 10%;
+	margin-bottom: 10%;
+}
+
+.course-picture:hover {
+	filter: blur(1px);
+	-webkit-filter: blur(1px);
+	-moz-filter: blur(1px);
+	-o-filter: blur(1px);
+	-ms-filter: blur(1px);
+}
+
+.course-text {	
+	width: 75%;
+	float: right;
+	margin-left: 0%;
+}
+
+.course-title {
 	margin: 5px;
-	margin-top: 40px;
 	margin-bottom: 10px;
 	font-weight: bold;
-	color: #017cf2;
 }
 
 .course-detail {
@@ -98,21 +150,33 @@ li {
 	font-size: 90%;
 }
 
+.subheading {
+	margin-top: 0px;
+	margin-bottom: 30px;
+	font-size: 95%;
+	display: block;
+}
+
+
 /* IDs */
 #mainFrame {
 	background-color: white; 
-	width: 70%; 
-	min-width: 400px; 
+	width: 70%;
 	margin-top: 0px; 
 	margin-bottom: 0px; 
 	margin-left: auto; 
 	margin-right: auto; 
 	padding-bottom: 0px;
+
+	-moz-transition: width 1s ease-in-out;
+  -webkit-transition: width 1s ease-in-out;
+  -o-transition: width 1s ease-in-out;
+  transition: width 1s ease-in-out;
 }
 
 #content {	
-	padding-left: 10%;
-	padding-right: 10%;
+	padding-left: 8%;
+	padding-right: 5%;
 }
 
 #logo {
@@ -122,48 +186,108 @@ li {
 	display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 30%;
+  padding-bottom: 5%;
 }
 
-#subheading {
-	margin-top: -40px;
-	margin-bottom: 40px;
-	font-size: 95%;
+#logo:hover {
+	-webkit-animation: jiggle 0.2s infinite;
+  -moz-animation-duration: 0.2s;
+  -moz-animation-name: jiggle;
+  -moz-animation-iteration-count: infinite;
+}
+
+@-moz-keyframes jiggle {
+    0% {
+        -moz-transform: rotate(-2deg);
+    }
+    50% {
+        -moz-transform: rotate(2deg);
+    }
+}
+
+@-webkit-keyframes jiggle {
+    0% {
+        -webkit-transform: rotate(-2deg);
+        }
+    50% {
+        -webkit-transform: rotate(2deg);
+    }
 }
 
 @media screen and (max-width: 1000px) {
+	/*less background for medium sized widths*/
 	#mainFrame {
 		width: 85%;
 	}
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
+	/*remove background for small widths*/
+
+	.course-picture-container {
+		width: 100%;
+	}
+
+	.course-picture {
+		width: 30%;
+		margin-left: 0%;
+		margin-top: 0%;
+		margin-bottom: 2%;
+	}
+
+	.course-text {
+		width: 100%;
+	}
+
 	#mainFrame {
 		width: 100%;
 	}
 }
 
-@media screen and (max-device-width: 640px) {
-  /*--- iPhone only CSS here ---*/
+@media (-webkit-min-device-pixel-ratio: 2) and (max-device-width : 1024px), (min-resolution: 192dpi) and (max-device-width : 1024px) { 
+    /* iphone retina stuff here */
 
-  body {
-  	font-size: 40px;
-  }
+    body {
+    	font-size: 36px;
+    }
 
-  h1 {
-  	font-size: 60px;
-  }
+    li {
+			margin-top: 40px;
+			margin-bottom: 40px;
+		}
 
-  h2 {
-  	font-size: 60px;
-  }
+  .button {
+  	margin: 20px;
+  	text-shadow: 0px 2px 0px gray;
+  	padding: 12px 30px 12px 30px;
+  	border-radius: 6px;
+	}
 
-  a {
-	  margin: 20px;
-	  padding: 20px 30px 20px 30px;
-	  border-radius: 3px;
-  }
+  .course-picture-container {
+		width: 100%;
+	}
 
-  #mainFrame {
-  	width: 100%;
-  }
+	.course-picture {
+		width: 30%;
+		margin-left: 0%;
+		margin-top: 0%;
+		margin-bottom: 2%;
+	}
+
+	.course-picture:hover {
+		filter: blur(2px);
+		-webkit-filter: blur(2px);
+		-moz-filter: blur(2px);
+		-o-filter: blur(2px);
+		-ms-filter: blur(2px);
+	}
+
+	.course-text {
+		width: 100%;
+	}
+
+	#mainFrame {
+		width: 100%;
+	}
 }
