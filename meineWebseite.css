@@ -59,12 +59,14 @@ h1 {
 	padding-top: 50px;
 	padding-bottom: 50px;
 	font-size: 170%;
+	font-weight: bold;
 }
 
 h2 {
 	margin-bottom: 0px;
 	margin-top: 50px;
 	font-size: 130%;
+	font-weight: bold;
 	display: inline-block;
 }
 
@@ -96,7 +98,7 @@ li {
   margin: 10px;
   color: white;
   text-shadow: 0px 1px 0px gray;
-  padding: 6px 15px 6px 15px;
+  padding: 8px 16px;
   outline: none;
   border-radius: 3px;
   text-decoration: none;
@@ -119,25 +121,25 @@ li {
 	width: 100%;
 	border: 2px solid black;
 	border-radius: 10px;
-	margin-top: 10%;
+	/*margin-top: 10%;*/
 	margin-bottom: 10%;
 }
 
 .course-text {	
 	width: 75%;
 	float: right;
-	margin-left: 0%;
+	margin-left: 0px;
 }
 
 .course-title {
 	margin: 5px;
+	margin-top: 0px;
 	margin-bottom: 10px;
 	font-weight: bold;
 }
 
 .course-detail {
 	margin: 5px;
-	margin-top: -5px;
 	line-height: 150%;
 }
 
@@ -147,12 +149,25 @@ li {
 }
 
 .subheading {
-	margin-top: 0px;
+	margin-top: 5px;
 	margin-bottom: 30px;
 	font-size: 95%;
 	display: block;
 }
 
+.audioBlock {
+	line-height: 100%;
+}
+
+.audioBlock p {
+	display: inline-block;
+	margin-bottom: 10px;
+	min-width: 50%;
+}
+
+.audioBlock audio {
+	display: inline-block;
+}
 
 /* IDs */
 #mainFrame {
@@ -181,8 +196,18 @@ li {
   padding-bottom: 10px;
 }
 
+#audioBlocks {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
 @media screen and (max-width: 1000px) {
 	/*less background for medium sized widths*/
+	
+	.audioBlock {
+		margin-bottom: 15px;
+	}
+
 	#mainFrame {
 		width: 85%;
 	}
@@ -203,7 +228,7 @@ li {
 	}
 
 	.course-picture {
-		width: 30%;
+		width: 40%;
 		margin-left: 0%;
 		margin-top: 0%;
 		margin-bottom: 2%;

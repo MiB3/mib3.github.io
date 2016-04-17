@@ -1,0 +1,4 @@
+Website TODO:
+- title and description (for google)
+- rewrite with better box model
+- add mail address
