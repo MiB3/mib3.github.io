@@ -293,6 +293,11 @@ li {
 		border-width: 4px;
 	}
 
+	.course-picture-small {
+		width: 20%;
+		float: none;
+	}
+
 	.course-text {
 		width: 100%;
 	}
