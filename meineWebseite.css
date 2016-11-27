@@ -173,6 +173,14 @@ li {
 	display: inline-block;
 }
 
+.icon-beginning {
+	margin-left: -.2em;
+}
+
+.icon-only {
+	margin: -.2em;
+}
+
 /* IDs */
 #mainFrame {
 	width: 70%;
@@ -198,6 +206,7 @@ li {
 #audioBlocks {
 	margin: 0.5em 0; 
 }
+
 
 @media screen and (max-width: 1413px) {
 	/* Audio blocks get aligned vertically for smaller width */
