@@ -47,24 +47,23 @@ h2, .subheading { color: black; }
 
 body {
 	background-color: #DDD;
-	padding: 0px; 
-	margin: 0px;
+	padding: 0; 
+	margin: 0;
 	font-family: "Helvetica Neue", Helvetica, sans-serif;
-	font-size: 18px;
+	font-size: 1.1em;
 }
 
 h1 {
+	margin-bottom: 1em;
+	padding: 1.7em 0;
 	text-align: center;
-	margin-bottom: 30px;
-	padding-top: 50px;
-	padding-bottom: 50px;
 	font-size: 170%;
 	font-weight: bold;
 }
 
 h2 {
-	margin-bottom: 0px;
-	margin-top: 50px;
+	margin-top: 2.1em;
+	margin-bottom: 0;
 	font-size: 130%;
 	font-weight: bold;
 	display: inline-block;
@@ -72,15 +71,12 @@ h2 {
 
 ul {
 	list-style-type: none;
-	margin-bottom: 50px;
-	padding-left: 0px;
 	float: none;
 }
 
 li {
-	margin-top: 20px;
-	margin-bottom: 20px;
 	width: 100%;
+	margin: 1.2em 0;
 	float: left;
 }
 
@@ -95,16 +91,15 @@ li {
 }
 
 .button {
-  margin: 10px;
+  margin: 0.6em;
+  padding: 0.5em 1em;
   color: white;
-  text-shadow: 0px 1px 0px gray;
-  padding: 8px 16px;
-  outline: none;
   border-radius: 3px;
   text-decoration: none;
   white-space: nowrap;
   display: inline-block;
   font-size: 90%;
+  text-shadow: 0 1px 0 gray;
 }
 
 .button:active {
@@ -127,40 +122,38 @@ li {
 
 .course-picture-small {
 	width: 48%;
-	min-width: 50px;
-	float: left;
 	margin-left: 2%;
 	margin-top: -5%;
+	float: left;
 }
 
 .course-text {	
 	width: 75%;
 	float: right;
-	margin-left: 0px;
+	margin-left: 0;
 }
 
 .course-title {
-	margin: 5px;
-	margin-top: 0px;
-	margin-bottom: 10px;
+	margin: 0.3em;
+	margin-top: 0;
 	font-weight: bold;
 	line-height: 150%;
 }
 
 .course-detail {
-	margin: 5px;
+	margin: 0.3em;
 	line-height: 150%;
 }
 
 .course-authors {
-	margin: 5px;
+	margin: 0.3em;
 	font-size: 90%;
 	line-height: 150%;
 }
 
 .subheading {
-	margin-top: 5px;
-	margin-bottom: 30px;
+	margin-top: 0.3em;
+	margin-bottom: 1.8em;
 	font-size: 95%;
 	display: block;
 }
@@ -170,9 +163,9 @@ li {
 }
 
 .audioBlock p {
-	display: inline-block;
-	margin-bottom: 5px;
 	min-width: 18em;
+	margin-bottom: 0.3em;
+	display: inline-block;
 }
 
 .audioBlock audio {
@@ -182,13 +175,10 @@ li {
 
 /* IDs */
 #mainFrame {
-	background-color: white; 
 	width: 70%;
-	margin-top: 0px; 
-	margin-bottom: 0px; 
-	margin-left: auto; 
-	margin-right: auto; 
-	padding-bottom: 0px;
+	margin: 0 auto;
+	padding-bottom: 0;
+	background-color: white;
 }
 
 #content {	
@@ -197,27 +187,26 @@ li {
 }
 
 #logo {
-	width: 20%;
-	min-width: 100px;
-	max-width: 120px;
-	display: block;
+  width: 6em;
   margin-left: auto;
   margin-right: auto;
-  padding-top: 50px;
+  padding-top: 3em;
+  display: block;
+
 }
 
 #audioBlocks {
-	margin-top: 10px;
-	margin-bottom: 10px;
+	margin: 0.5em 0; 
 }
 
 @media screen and (max-width: 1413px) {
+	/* Audio blocks get aligned vertically for smaller width */
 	.audioBlock {
-		margin-bottom: 15px;
+		margin-bottom: 0.8em;
 	}
 
 	.audioBlock p {
-		margin-bottom: 10px;
+		margin-bottom: 0.5em;
 	}
 }
 
@@ -237,6 +226,7 @@ li {
 
 @media screen and (max-width: 500px) {
 	/*remove background for small widths*/
+	/* put course pictures on top of course text */
 
 	.course-picture-container {
 		width: 100%;
@@ -244,8 +234,7 @@ li {
 
 	.course-picture {
 		width: 40%;
-		margin-left: 0%;
-		margin-top: 0%;
+		margin: 0;
 		margin-bottom: 2%;
 	}
 
@@ -263,17 +252,18 @@ li {
 	}
 }
 
-@media (-webkit-min-device-pixel-ratio: 2) and (max-device-width : 1024px), (min-resolution: 192dpi) and (max-device-width : 1024px) { 
+
+@media (-webkit-min-device-pixel-ratio: 2) and (max-device-width : 1024px), (min-resolution: 192dpi) and (max-device-width : 1024px) {
     /* iphone retina stuff here */
 
-    body {
-    	font-size: 36px;
-    }
+  body {
+  	font-size: 36px;
+  }
 
-    li {
-			margin-top: 40px;
-			margin-bottom: 40px;
-		}
+  li {
+		margin-top: 40px;
+		margin-bottom: 40px;
+	}
 
   .button {
   	margin: 20px;
